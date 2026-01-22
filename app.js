@@ -5,7 +5,7 @@ const modelSelect = document.getElementById("model");
 const results = document.getElementById("results");
 
 // Load CSV
-fetch("data/skis.csv")
+fetch("data/skis_v1.csv")
   .then(res => res.text())
   .then(text => {
     const rows = text.trim().split("\n").slice(1);
