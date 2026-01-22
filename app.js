@@ -3,6 +3,9 @@ let skiData = [];
 const brandSelect = document.getElementById("brand");
 const modelSelect = document.getElementById("model");
 const results = document.getElementById("results");
+console.log("brandSelect:", brandSelect);
+console.log("modelSelect:", modelSelect);
+console.log("results:", results);
 
 // Load CSV
 fetch("data/skis_v1.csv")
