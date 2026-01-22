@@ -24,22 +24,88 @@
     p {
       color: #666;
     }
+    .subtitle {
+  color: #666;
+  margin-bottom: 2rem;
+}
+
+.controls {
+  display: flex;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+label {
+  font-size: 0.85rem;
+  color: #444;
+}
+
+select {
+  margin-top: 0.25rem;
+  padding: 0.4rem 0.6rem;
+}
+
+.results {
+  border-top: 1px solid #ddd;
+  padding-top: 1.5rem;
+  min-height: 120px;
+}
+
+.placeholder {
+  color: #888;
+  font-style: italic;
+}
+
+.card {
+  text-align: left;
+  max-width: 420px;
+  margin: 0 auto;
+}
+
+.card h2 {
+  margin-bottom: 0.5rem;
+}
+
+.card p {
+  margin: 0.25rem 0;
+}
+
+footer {
+  margin-top: 3rem;
+  font-size: 0.75rem;
+  color: #999;
+}
   </style>
 </head>
 <body>
  <div class="box">
-  <h1>FIELDSIDE</h1>
-  <p>Internal projects, experiments, and tools.</p>
+  <h1>SKI DATA</h1>
+  <p class="subtitle">An evolving reference for nordic ski platforms.</p>
 
-  <div style="margin-top: 2rem;">
-    <select id="brand">
-      <option value="">Select brand</option>
-    </select>
+  <div class="controls">
+    <label>
+      Brand<br />
+      <select id="brand">
+        <option value="">Select brand</option>
+      </select>
+    </label>
 
-    <select id="model" style="margin-left: 1rem;">
-      <option value="">Select model</option>
-    </select>
+    <label>
+      Model<br />
+      <select id="model" disabled>
+        <option value="">Select model</option>
+      </select>
+    </label>
   </div>
+
+  <div id="results" class="results">
+    <p class="placeholder">Select a brand and model to view details.</p>
+  </div>
+
+  <footer>
+    A Fieldside project · Data is evolving
+  </footer>
+</div>
 </div>
   <script src="app.js"></script>
 </body>
