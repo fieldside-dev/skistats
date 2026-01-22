@@ -10,9 +10,11 @@ fetch("data/skis_v1.csv")
   .then(text => {
     const rows = text.trim().split("\n").slice(1);
     skiData = rows.map(row => {
-      const [brand, model, slug, discipline, category, notes] = row.split(",");
-      return { brand, model, slug, discipline, category, notes };
-    });
+  const [brand, model, slug, discipline, category, notes] =
+    row.split(",").map(v => v.trim());
+
+  return { brand, model, slug, discipline, category, notes };
+});
 
     populateBrands();
   });
