@@ -1,52 +1,62 @@
-async function loadSkis() {
-  const response = await fetch('/data/skis_v1.csv');
-  const text = await response.text();
+let skiData = [];
 
-  const lines = text.trim().split('\n');
-  const headers = lines[0].split(',');
+const brandSelect = document.getElementById("brand");
+const modelSelect = document.getElementById("model");
+const results = document.getElementById("results");
 
-  const rows = lines.slice(1).map(line => {
-    const values = line.split(',');
-    const obj = {};
-    headers.forEach((h, i) => {
-      obj[h.trim()] = values[i]?.trim();
+// Load CSV
+fetch("data/skis.csv")
+  .then(res => res.text())
+  .then(text => {
+    const rows = text.trim().split("\n").slice(1);
+    skiData = rows.map(row => {
+      const [brand, model, slug, discipline, category, notes] = row.split(",");
+      return { brand, model, slug, discipline, category, notes };
     });
-    return obj;
+
+    populateBrands();
   });
 
-  return rows;
-}
-
-function populateFilters(data) {
-  const brandSelect = document.getElementById('brand');
-  const modelSelect = document.getElementById('model');
-
-  const brands = [...new Set(data.map(s => s.brand))];
+function populateBrands() {
+  const brands = [...new Set(skiData.map(s => s.brand))];
 
   brands.forEach(brand => {
-    const opt = document.createElement('option');
+    const opt = document.createElement("option");
     opt.value = brand;
     opt.textContent = brand;
     brandSelect.appendChild(opt);
   });
-
-  brandSelect.addEventListener('change', () => {
-    modelSelect.innerHTML = '<option value="">Select model</option>';
-
-    const models = data
-      .filter(s => s.brand === brandSelect.value)
-      .map(s => s.model);
-
-    [...new Set(models)].forEach(model => {
-      const opt = document.createElement('option');
-      opt.value = model;
-      opt.textContent = model;
-      modelSelect.appendChild(opt);
-    });
-  });
 }
 
-document.addEventListener('DOMContentLoaded', async () => {
-  const skis = await loadSkis();
-  populateFilters(skis);
+brandSelect.addEventListener("change", () => {
+  modelSelect.innerHTML = `<option value="">Select model</option>`;
+  modelSelect.disabled = true;
+  results.innerHTML = `<p class="placeholder">Select a brand and model to view details.</p>`;
+
+  if (!brandSelect.value) return;
+
+  const models = skiData.filter(s => s.brand === brandSelect.value);
+
+  models.forEach(ski => {
+    const opt = document.createElement("option");
+    opt.value = ski.slug;
+    opt.textContent = ski.model;
+    modelSelect.appendChild(opt);
+  });
+
+  modelSelect.disabled = false;
+});
+
+modelSelect.addEventListener("change", () => {
+  const ski = skiData.find(s => s.slug === modelSelect.value);
+  if (!ski) return;
+
+  results.innerHTML = `
+    <div class="card">
+      <h2>${ski.brand} ${ski.model}</h2>
+      <p><strong>Discipline:</strong> ${ski.discipline}</p>
+      <p><strong>Category:</strong> ${ski.category}</p>
+      <p><strong>Notes:</strong> ${ski.notes}</p>
+    </div>
+  `;
 });
