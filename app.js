@@ -9,12 +9,20 @@ fetch("data/skis_v1.csv")
   .then(res => res.text())
   .then(text => {
     const rows = text.trim().split("\n").slice(1);
-    skiData = rows.map(row => {
-  const [brand, model, slug, discipline, category, notes] =
-    row.split(",").map(v => v.trim());
 
-  return { brand, model, slug, discipline, category, notes };
-});
+    skiData = rows.map(row => {
+      const [brand, model, slug, discipline, category, notes] =
+        row.split(",").map(v => v.trim());
+
+      return {
+        brand: brand.toLowerCase(),
+        model,
+        slug,
+        discipline,
+        category,
+        notes
+      };
+    });
 
     populateBrands();
   });
@@ -37,7 +45,9 @@ brandSelect.addEventListener("change", () => {
 
   if (!brandSelect.value) return;
 
-  const models = skiData.filter(s => s.brand === brandSelect.value);
+  const selectedBrand = brandSelect.value.toLowerCase();
+
+  const models = skiData.filter(s => s.brand === selectedBrand);
 
   models.forEach(ski => {
     const opt = document.createElement("option");
